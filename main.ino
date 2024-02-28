@@ -7,10 +7,6 @@
 #include <SPI.h>
 #include <SD.h>
 
-int ledping = 7;    // led pin
-int ledpinr = 6;
-int buzzer = 5;     // buzzer pin
-
 int servopin1 = 9;  // Servo pin
 int servopin2 = 10;
 int servopin3 = 11;
@@ -26,7 +22,6 @@ MS5611 ms5611;
 
 long timer = 0;
 const int chipSelect = 4;
-#define LED_PIN 13
 
 void setup() {
   Serial.begin(9600);
@@ -35,10 +30,6 @@ void setup() {
   mpu6050.calcGyroOffsets(true);
 
   attachServos();  // Function to attach servo objects to pins
-
-  pinMode(ledping, OUTPUT);
-  pinMode(ledpinr, OUTPUT);
-  pinMode(buzzer, OUTPUT);
 
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
@@ -60,7 +51,7 @@ void setup() {
   // verify connection
   Serial.println("Testing device connections...");
   Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
-  pinMode(LED_PIN, OUTPUT);
+
 
   // Initializing SD card
   if (!SD.begin(chipSelect)) {
@@ -70,7 +61,6 @@ void setup() {
 }
 
 void loop() {
-  activateIndicators();  // Function to activate LED and buzzer
   readAndPrintAngles();  // Function to read and print angles
   stabilizeServos();    // Function to stabilize and set servo angles
   readBarometerData();  // Function to read and log barometer data
@@ -83,11 +73,7 @@ void attachServos() {
   servo4.attach(servopin4);
 }
 
-void activateIndicators() {
-  digitalWrite(ledpinr, HIGH);
-  digitalWrite(ledping, HIGH);
-  digitalWrite(buzzer, HIGH);
-}
+
 
 void readAndPrintAngles() {
   mpu6050.update();
@@ -103,18 +89,10 @@ void readAndPrintAngles() {
 }
 
 void stabilizeServos() {
-  stabilizeServo2();
   stabilizeServo1();
+  stabilizeServo2();
   stabilizeServo3();
   stabilizeServo4();
-}
-
-void stabilizeServo2() {
-  if (mpu6050.getAngleX() > -1 && mpu6050.getAngleX() < 1) {
-    servo2.write(90);
-  } else {
-    servo2.write(90 - mpu6050.getAngleY());
-  }
 }
 
 void stabilizeServo1() {
@@ -122,6 +100,14 @@ void stabilizeServo1() {
     servo1.write(90);
   } else {
     servo1.write(90 + mpu6050.getAngleY());
+  }
+}
+
+void stabilizeServo2() {
+  if (mpu6050.getAngleX() > -1 && mpu6050.getAngleX() < 1) {
+    servo2.write(90);
+  } else {
+    servo2.write(90 - mpu6050.getAngleY());
   }
 }
 
