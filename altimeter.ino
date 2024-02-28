@@ -114,10 +114,6 @@ File dataFile= SD.open("datalog.txt", FILE_WRITE);
       
       if (millis() > 10000) //change this number to change alarm delay (1s = 1000ms)
       {tone (8,1000); // change the second number to alter the tone of the peizo alarm
-   
-      
-    
   }
       else{ noTone(8);}
-
 }}
