@@ -3,7 +3,6 @@
 
 int ledping = 7;    // led pin
 int ledpinr = 6;
-int buzzer = 5;     // buzzer pin
 
 int servopin1 = 9;  // Servo pin
 int servopin2 = 10;
@@ -29,13 +28,13 @@ void setup() {
 
   pinMode(ledping, OUTPUT);
   pinMode(ledpinr, OUTPUT);
-  pinMode(buzzer, OUTPUT);
 }
 
 void loop() {
   activateIndicators();  // Function to activate LED and buzzer
   readAndPrintAngles();  // Function to read and print angles
-  stabilizeServos();    // Function to stabilize and set servo angles
+  delay(100);
+  // stabilizeServos();    // Function to stabilize and set servo angles
 }
 
 void attachServos() {
@@ -48,20 +47,14 @@ void attachServos() {
 void activateIndicators() {
   digitalWrite(ledpinr, HIGH);
   digitalWrite(ledping, HIGH);
-  digitalWrite(buzzer, HIGH);
 }
 
 void readAndPrintAngles() {
   mpu6050.update();
-
-  if (millis() - timer > 1000) {
     Serial.print("angleX : ");
     Serial.print(mpu6050.getAngleX());
     Serial.print("  angleY : ");
     Serial.println(mpu6050.getAngleY());
-
-    timer = millis();
-  }
 }
 
 void stabilizeServos() {

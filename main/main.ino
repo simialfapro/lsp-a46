@@ -2,8 +2,8 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <MS5611.h>
+// #include "MPU6050.h"
 #include "I2Cdev.h"
-#include "MPU6050.h"
 #include <SPI.h>
 #include <SD.h>
 
@@ -12,11 +12,13 @@ int servopin2 = 10;
 int servopin3 = 11;
 int servopin4 = 12;
 
+int16_t ax, ay, az;
+
+
 Servo servo1;   // Servo object
 Servo servo2;
 Servo servo3;
 Servo servo4;
-
 MPU6050 mpu6050(Wire);
 MS5611 ms5611;
 
@@ -39,10 +41,10 @@ void setup() {
   }
 
   // Get reference pressure for relative altitude
-  referencePressure = ms5611.readPressure();
+  float referencePressure = ms5611.getPressure();
 
   // Check settings
-  checkSettings();
+  void checkSettings();
 
   // initialize device
   Serial.println("Initializing I2C devices...");
@@ -129,7 +131,7 @@ void stabilizeServo4() {
 
 void readBarometerData() {
   // Read raw accel measurements from device
-  accelgyro.getAcceleration(&ax, &ay, &az);
+  accelgyro.4(&ax, &ay, &az);
 
   // Read raw pressure and temp values
   uint32_t rawTemp = ms5611.readRawTemperature();

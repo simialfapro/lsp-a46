@@ -12,8 +12,8 @@ const int chipSelect = 4;
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include "Wire.h"
 #endif
-MPU6050 accelgyro;
-//MPU6050 accelgyro(0x69); // <-- use for AD0 high
+// MPU6050 accelgyro;
+MPU6050 accelgyro(0x69); // <-- use for AD0 high
 #define OUTPUT_READABLE_ACCELGYRO
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
@@ -36,16 +36,17 @@ void setup()
   Serial.begin(9600);
 
   // Initialize MS5611 sensor
-  Serial.println("Initialize MS5611 Sensor");
-
-  while(!ms5611.begin())
-  {
-    Serial.println("Could not find a valid MS5611 sensor, check wiring!");
-    delay(500);
-  }
+  
+Serial.println("Before MS5611.begin()");
+while(!ms5611.begin())
+{
+   Serial.println("Could not find a valid MS5611 sensor, check wiring!");
+   delay(500);
+}
+Serial.println("After MS5611.begin()");
 
   // Get reference pressure for relative altitude
-  referencePressure = ms5611.readPressure();
+ referencePressure = ms5611.readPressure();
 
   // Check settings
   checkSettings();
@@ -59,13 +60,13 @@ void setup()
     Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
     pinMode(LED_PIN, OUTPUT);
     
-//    Serial.print("Initializing SD card...");
+  Serial.print("Initializing SD card...");
   if (!SD.begin(chipSelect)) {// see if the card is present and can be initialized:
- // Serial.println("Card failed, or not present");
+    Serial.println("Card failed, or not present");
   // don't do anything more:
   return;
   }
- // Serial.println("card initialized.");
+ Serial.println("card initialized.");
 
 }
 
