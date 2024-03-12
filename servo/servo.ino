@@ -38,7 +38,7 @@ void loop() {
    stabilizeServos();
   // Test each motor individually
   // testMotors();
-  delay(100);  // Add a delay after each test to ensure sufficient time before moving to the next motor
+  // delay(100);  // Add a delay after each test to ensure sufficient time before moving to the next motor
 }
 
 void attachServos() {
@@ -106,7 +106,7 @@ void stabilizeServo4() {
 }
 
 void testMotors() {
-  int delayTime = 200;  // Time to test each motor in milliseconds
+  int delayTime = 1000;  // Time to test each motor in milliseconds
 
   switch (currentMotor) {
     case 1:
