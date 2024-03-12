@@ -1,13 +1,13 @@
 #include <MPU6050_tockn.h>
 #include <Servo.h>
 
-int ledping = 7;    // led pin
+int ledping = 5;    // led pin
 int ledpinr = 6;
 
 int servopin1 = 9;  // Servo pin
-int servopin2 = 10;
-int servopin3 = 11;
-int servopin4 = 12;
+int servopin2 = 8;
+int servopin3 = 7;
+int servopin4 = 10;
 
 Servo servo1;   // Servo object
 Servo servo2;
@@ -18,6 +18,8 @@ MPU6050 mpu6050(Wire);
 
 long timer = 0;
 
+int currentMotor = 1;  // Variable to keep track of the current motor being tested
+
 void setup() {
   Serial.begin(9600);
   Wire.begin();
@@ -25,17 +27,18 @@ void setup() {
   mpu6050.calcGyroOffsets(true);
 
   attachServos();  // Function to attach servo objects to pins
-
   testMotors();
   pinMode(ledping, OUTPUT);
   pinMode(ledpinr, OUTPUT);
 }
 
 void loop() {
-  activateIndicators();  // Function to activate LED and buzzer
-  readAndPrintAngles();  // Function to read and print angles
-  delay(100);
-  stabilizeServos();    // Function to stabilize and set servo angles
+   activateIndicators();  // Function to activate LED and buzzer
+   readAndPrintAngles();  // Function to read and print angles
+   stabilizeServos();
+  // Test each motor individually
+  // testMotors();
+  delay(100);  // Add a delay after each test to ensure sufficient time before moving to the next motor
 }
 
 void attachServos() {
@@ -52,10 +55,15 @@ void activateIndicators() {
 
 void readAndPrintAngles() {
   mpu6050.update();
+
+  if (millis() - timer > 1000) {
     Serial.print("angleX : ");
     Serial.print(mpu6050.getAngleX());
     Serial.print("  angleY : ");
     Serial.println(mpu6050.getAngleY());
+
+    timer = millis();
+  }
 }
 
 void stabilizeServos() {
@@ -98,7 +106,7 @@ void stabilizeServo4() {
 }
 
 void testMotors() {
-  int delayTime = 2000;  // Time to test each motor in milliseconds
+  int delayTime = 200;  // Time to test each motor in milliseconds
 
   switch (currentMotor) {
     case 1:
