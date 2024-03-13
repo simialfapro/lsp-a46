@@ -18,8 +18,6 @@ MPU6050 mpu6050(Wire);
 
 long timer = 0;
 
-int currentMotor = 1;  // Variable to keep track of the current motor being tested
-
 void setup() {
   Serial.begin(9600);
   Wire.begin();
@@ -36,9 +34,6 @@ void loop() {
    activateIndicators();  // Function to activate LED and buzzer
    readAndPrintAngles();  // Function to read and print angles
    stabilizeServos();
-  // Test each motor individually
-  // testMotors();
-  // delay(100);  // Add a delay after each test to ensure sufficient time before moving to the next motor
 }
 
 void attachServos() {
@@ -108,8 +103,6 @@ void stabilizeServo4() {
 void testMotors() {
   int delayTime = 1000;  // Time to test each motor in milliseconds
 
-  switch (currentMotor) {
-    case 1:
       Serial.println("Testing Motor 1");
       Serial.println("Moving Motor 1 to 0 degrees");
       servo1.write(0);  // Move Motor 1 to 0 degrees
@@ -120,9 +113,7 @@ void testMotors() {
       Serial.println("Moving Motor 1 to 90 degrees (center position)");
       servo1.write(90);  // Move Motor 1 to 90 degrees (center position)
       delay(delayTime);
-      break;
 
-    case 2:
       Serial.println("Testing Motor 2");
       Serial.println("Moving Motor 2 to 0 degrees");
       servo2.write(0);  // Move Motor 2 to 0 degrees
@@ -133,9 +124,7 @@ void testMotors() {
       Serial.println("Moving Motor 2 to 90 degrees (center position)");
       servo2.write(90);  // Move Motor 2 to 90 degrees (center position)
       delay(delayTime);
-      break;
 
-    case 3:
       Serial.println("Testing Motor 3");
       Serial.println("Moving Motor 3 to 0 degrees");
       servo3.write(0);  // Move Motor 3 to 0 degrees
@@ -146,9 +135,7 @@ void testMotors() {
       Serial.println("Moving Motor 3 to 90 degrees (center position)");
       servo3.write(90);  // Move Motor 3 to 90 degrees (center position)
       delay(delayTime);
-      break;
 
-    case 4:
       Serial.println("Testing Motor 4");
       Serial.println("Moving Motor 4 to 0 degrees");
       servo4.write(0);  // Move Motor 4 to 0 degrees
@@ -159,12 +146,4 @@ void testMotors() {
       Serial.println("Moving Motor 4 to 90 degrees (center position)");
       servo4.write(90);  // Move Motor 4 to 90 degrees (center position)
       delay(delayTime);
-      break;
-  }
-
-  currentMotor++;  // Move to the next motor
-
-  if (currentMotor > 4) {
-    currentMotor = 1;  // Reset to the first motor after testing all motors
-  }
 }

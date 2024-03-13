@@ -9,6 +9,18 @@ MPU6050 accelgyro;
 int ledping = 5;    // led pin
 int ledpinr = 6;
 
+int servopin1 = 9;  // Servo pin
+int servopin2 = 8;
+int servopin3 = 7;
+int servopin4 = 10;
+
+Servo servo1;   // Servo object
+Servo servo2;
+Servo servo3;
+Servo servo4;
+
+MPU6050 mpu6050(Wire);
+
 void setup() {
   Wire.begin();
 
