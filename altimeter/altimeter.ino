@@ -3,23 +3,25 @@
 #include "MPU6050.h"
 #include <SD.h>
 
-MPU6050 accelgyro;
-
 int ledping = 5;    // led pin
 int ledpinr = 6;
 
 void setup() {
-  Wire.begin();
-
   Serial.begin(9600);
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true);
 
   // Initialize MPU6050
   Serial.println("Initializing MPU6050...");
-  accelgyro.initialize();
 
   // Verify connection
   Serial.println("Testing device connections...");
-  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+
+  attachServos();  // Function to attach servo objects to pins
+  testMotors();    // Testing Motors
+  pinMode(ledping, OUTPUT);
+  pinMode(ledpinr, OUTPUT);
 
   // check if sd card module is working
   Serial.print("Initializing SD card...");
@@ -28,6 +30,7 @@ void setup() {
     return;
   }
   Serial.println("card initialized.");
+  digitalWrite(ledpinr, HIGH);
 }
 
 void loop() {
