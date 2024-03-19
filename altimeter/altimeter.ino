@@ -4,7 +4,6 @@
 #include <SD.h>
 
 MPU6050 accelgyro;
-#define LED_PIN 13
 
 int ledping = 5;    // led pin
 int ledpinr = 6;
@@ -22,10 +21,9 @@ void setup() {
   Serial.println("Testing device connections...");
   Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 
-  pinMode(LED_PIN, OUTPUT);
-
+  // check if sd card module is working
   Serial.print("Initializing SD card...");
-  if (!SD.begin(4)) { // Use the chip select pin of your SD card module
+  if (!SD.begin(4)) { 
     Serial.println("Card failed, or not present");
     return;
   }
@@ -38,25 +36,39 @@ void loop() {
 
 void getAltitude() {
   // Read raw accel measurements from MPU6050
-  int16_t ax, ay, az;
-  accelgyro.getAcceleration(&ax, &ay, &az);
+  int ax = mpu6050.getAccX();
 
-  // Convert raw accel data to G
+  // convert raw accel data to G
   float accelX_G = ax / 2048.0;
 
-  // Calculate X-height (very simplified method)
-  // Note: This is a basic integration and may not be accurate
-  float xHeight = 0.5 * accelX_G * 0.001;
+  // initialize the time variables
+  static unsigned long startTime = 0;
+  static unsigned long currentTime = 0;
+  static bool movingUp = false;
 
-  // Convert sensor data to strings
+  if (accelX_G > 0.1) {
+    // If the sensor is moving upwards, start time
+    if (!movingUp) {
+      startTime = millis();
+      movingUp = true;
+    }
+    currentTime = millis();
+  } else {
+    // Reset time variables if the sensor is not moving upwards
+    startTime = 0;
+    currentTime = 0;
+    movingUp = false;
+  }
+  float deltaTime = (currentTime - startTime) / 1000.0; // Convert milliseconds to seconds
+
+  // Calculate X-height using the formula: 0.5 * acceleration along X-axis * time^2
+  float xHeight = 0.5 * accelX_G * deltaTime * deltaTime;
+
   String comma = String(',');
   String accelXraw = String(ax);
-  String timer = String(millis());
+  String timer = String(currentTime);
 
-  // Create a big string containing above strings
   String Baro_data = String(accelXraw + comma + xHeight + comma + timer);
-
-  // Print the data to Serial
   Serial.println(Baro_data);
 
   // Write the data to the SD card
@@ -65,6 +77,10 @@ void getAltitude() {
     dataFile.println(Baro_data);
     dataFile.close();
   }
-
-  delay(500);
+  delay(1);
 }
+
+
+
+
+

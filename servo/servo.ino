@@ -4,9 +4,9 @@
 int ledping = 5;    // led pin
 int ledpinr = 6;
 
-int servopin1 = 9;  // Servo pin
+int servopin1 = 7;  // Servo pin
 int servopin2 = 8;
-int servopin3 = 7;
+int servopin3 = 9;
 int servopin4 = 10;
 
 Servo servo1;   // Servo object
@@ -33,46 +33,50 @@ void setup() {
 void loop() {
    activateIndicators();  // Function to activate LED and buzzer
    readAndPrintAngles();  // Function to read and print angles
-   stabilizeServos();
+   stabilizeServos(); // Stabilizes Servos
 }
 
-void attachServos() {
-  servo1.attach(servopin1);
+void attachServos() { // attaches all servopins
+  servo1.attach(servopin1); 
   servo2.attach(servopin2);
   servo3.attach(servopin3);
   servo4.attach(servopin4);
 }
 
-void activateIndicators() {
+void activateIndicators() { // activates LED indicators
   digitalWrite(ledpinr, HIGH);
   digitalWrite(ledping, HIGH);
 }
 
-void readAndPrintAngles() {
+void readAndPrintAngles() { // reads and prints angles
   mpu6050.update();
-
   if (millis() - timer > 1000) {
     Serial.print("angleX : ");
     Serial.print(mpu6050.getAngleX());
     Serial.print("  angleY : ");
     Serial.println(mpu6050.getAngleY());
-
-    timer = millis();
+    timer = millis(); 
+    String Angle_Data = String(mpu6050.getAngleY() + "," + mpu6050.getAngleX() + "," + timer); 
+    File dataFile = SD.open("angledata.txt", FILE_WRITE); // writes angleadata to sd-card
+    if (dataFile) {
+      dataFile.println(Angle_Data);
+      dataFile.close();
+    }
   }
 }
 
-void stabilizeServos() {
+void stabilizeServos() { // stabilizes all servos
   stabilizeServo2();
   stabilizeServo1();
   stabilizeServo3();
   stabilizeServo4();
 }
 
-void stabilizeServo2() {
+void stabilizeServo2() { // servos stabilize functions
   if (mpu6050.getAngleX() > -1 && mpu6050.getAngleX() < 1) {
     servo2.write(90);
   } else {
-    servo2.write(90 - mpu6050.getAngleY());
+    servo2.write(90 - mpu6050.getAngleY()); // reacts to angle from sensor
   }
 }
 
@@ -100,7 +104,7 @@ void stabilizeServo4() {
   }
 }
 
-void testMotors() {
+void testMotors() { // Tests all motors
   int delayTime = 1000;  // Time to test each motor in milliseconds
 
       Serial.println("Testing Motor 1");
