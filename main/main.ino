@@ -49,7 +49,7 @@ void setup() {
 }
 
 void loop() {
-   activateIndicators();  // Function to activate LED and buzzer
+   activateIndicators();  // Function to activate LED 
    readAndPrintAngles();  // Function to read and print angles
    stabilizeServos(); // Stabilizes Servos
 }

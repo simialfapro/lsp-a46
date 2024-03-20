@@ -1,6 +1,6 @@
 #include <Wire.h>
+#include <MPU6050_tockn.h>
 #include "I2Cdev.h"
-#include "MPU6050.h"
 #include <SD.h>
 
 int ledping = 5;    // led pin
