@@ -24,3 +24,8 @@ This repository contains code for a self-stabilizing Arduino model rocket module
     }
     ...
 
+
+## Dependencies:
+Libraries:
+- [MPU6050_tockn.h](https://github.com/tockn/MPU6050_tockn) 
+- [I2Cdev.h](https://github.com/jrowberg/i2cdevlib)
