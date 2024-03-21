@@ -1,14 +1,13 @@
 # lsp-a46
-This Repository includes the Code of a self-stabilizing Arduino-Modelrocket-Module.
-The code is seperated in 3 Directorires:
+This repository contains code for a self-stabilizing Arduino model rocket module. The code is divided into three sections:
 
-- altimeter: contains Code only for Height measurement
-- servo: contains Code only for self-stabilisation system. 
-- main: merges both codes togheter. 
+- Altimeter: This directory contains code specifically for height measurement. It is designed to capture the rocket's altitude.
+- Servo: In this directory, you'll find code dedicated solely to the self-stabilization system. This portion of the code is responsible for controlling the servo motors, which serve to stabilize the rocket during flight.
+- Main: This directory merges both codes together. It contains the main code that integrates both altitude measurement and the self-stabilization system
 
 ![Modelrocket-Module](/img/module.jpeg)
 
-## Arduino Wiring Schematic 
+## Arduino Wiring Schematic:
 
 ![Modelrocket-Module](/img/schema.png)
 
