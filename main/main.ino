@@ -95,7 +95,7 @@ void stabilizeServo2() { // servos stabilize functions
   if (mpu6050.getAngleX() > -1 && mpu6050.getAngleX() < 1) {
     servo2.write(95);
   } else {
-    servo2.write(95 - mpu6050.getAngleY()); // reacts to angle from sensor
+    servo2.write(95 + mpu6050.getAngleY()); // reacts to angle from sensor
   }
 }
 
@@ -103,7 +103,7 @@ void stabilizeServo1() {
   if (mpu6050.getAngleX() == 0) {
     servo1.write(96);
   } else {
-    servo1.write(96 + mpu6050.getAngleY());
+    servo1.write(96 - mpu6050.getAngleY());
   }
 }
 
@@ -111,7 +111,7 @@ void stabilizeServo3() {
   if (mpu6050.getAngleY() == 0) {
     servo3.write(95);
   } else {
-    servo3.write(95 + mpu6050.getAngleX());
+    servo3.write(95 - mpu6050.getAngleX());
   }
 }
 
@@ -119,7 +119,7 @@ void stabilizeServo4() {
   if (mpu6050.getAngleY() == 0) {
     servo4.write(97);
   } else {
-    servo4.write(97 - mpu6050.getAngleX());
+    servo4.write(97 + mpu6050.getAngleX());
   }
 }
 
